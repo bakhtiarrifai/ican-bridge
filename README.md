@@ -1,7 +1,11 @@
 # iCan Bridge
 
 Jembatan satu arah: notifikasi app **iCan CGM** (Sinocare) -> **Health Connect**.
-Dari Health Connect, Samsung Health / Fitbit / Home Assistant bisa ikut membaca.
+Dari Health Connect, Google Fit / Fitbit / Home Assistant bisa ikut membaca.
+
+## Kebijakan Privasi
+
+Lihat [Privacy Policy](https://bakhtiarrifai.github.io/ican-bridge).
 
 Tidak menyentuh BLE transmitter sama sekali, jadi app iCan resmi tetap jalan normal.
 
