@@ -8,14 +8,14 @@ plugins {
 
 android {
     namespace = "dev.masbah.icanbridge"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "dev.masbah.icanbridge"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 3
-        versionName = "0.2.1"
+        targetSdk = 36
+        versionCode = 4
+        versionName = "0.2.2"
     }
 
     signingConfigs {
