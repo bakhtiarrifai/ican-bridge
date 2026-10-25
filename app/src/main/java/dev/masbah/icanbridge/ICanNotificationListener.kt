@@ -14,11 +14,12 @@ import java.util.Locale
 class ICanNotificationListener : NotificationListenerService() {
 
     companion object {
-        // Paket app iCan versi CE. Kalau region kamu memakai varian lain,
-        // cek daftar paket lewat DebugLog dengan ACCEPT_ALL = true.
+        // Paket app iCan Sinocare (versi CE, global, dan varian CGM).
         val TARGET_PACKAGES = setOf(
             "com.sinocare.ican.health.ce",
-            "com.sinocare.ican.health"
+            "com.sinocare.ican.health",
+            "com.sinocare.cgm.ce",
+            "com.sinocare.cgm"
         )
 
         /** Set true sementara kalau notifikasi iCan tidak pernah tertangkap. */
@@ -39,14 +40,22 @@ class ICanNotificationListener : NotificationListenerService() {
         if (!ACCEPT_ALL && sbn.packageName !in TARGET_PACKAGES) return
 
         val ex = sbn.notification.extras
+        val lines = ex.getCharSequenceArray(Notification.EXTRA_TEXT_LINES)
+            ?.mapNotNull { it?.toString() }
+            .orEmpty()
+
         val parts = listOfNotNull(
             ex.getCharSequence(Notification.EXTRA_TITLE)?.toString(),
+            ex.getCharSequence(Notification.EXTRA_TITLE_BIG)?.toString(),
             ex.getCharSequence(Notification.EXTRA_TEXT)?.toString(),
             ex.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString(),
             ex.getCharSequence(Notification.EXTRA_SUB_TEXT)?.toString(),
-            ex.getCharSequence(Notification.EXTRA_INFO_TEXT)?.toString()
-        )
-        val raw = parts.joinToString(" | ")
+            ex.getCharSequence(Notification.EXTRA_INFO_TEXT)?.toString(),
+            ex.getCharSequence(Notification.EXTRA_SUMMARY_TEXT)?.toString(),
+            sbn.notification.tickerText?.toString()
+        ) + lines
+
+        val raw = parts.filter { it.isNotBlank() }.distinct().joinToString(" | ")
 
         val reading = GlucoseParser.parse(raw)
         val stamp = SimpleDateFormat("HH:mm:ss", Locale.US).format(Date(sbn.postTime))

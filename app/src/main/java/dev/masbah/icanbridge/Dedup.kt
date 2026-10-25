@@ -18,8 +18,10 @@ class Dedup(context: Context) {
         val lastValue = prefs.getInt("last_value", -1)
         val lastAt = prefs.getLong("last_at", 0L)
 
-        if (mgdl == lastValue && atMs - lastAt < minGapMs) return false
-        if (atMs - lastAt < 60_000L) return false // guard notifikasi yang di-repost cepat
+        val elapsed = atMs - lastAt
+
+        if (mgdl == lastValue && elapsed in 0 until minGapMs) return false
+        if (elapsed in 0 until 60_000L) return false // guard notifikasi yang di-repost cepat
 
         prefs.edit().putInt("last_value", mgdl).putLong("last_at", atMs).apply()
         return true

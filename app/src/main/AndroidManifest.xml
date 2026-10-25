@@ -6,8 +6,11 @@
 
     <queries>
         <package android:name="com.google.android.apps.healthdata" />
-        <!-- app iCan, supaya bisa dicek terinstall atau tidak -->
+        <!-- app iCan, varian resmi & CE Sinocare -->
         <package android:name="com.sinocare.ican.health.ce" />
+        <package android:name="com.sinocare.ican.health" />
+        <package android:name="com.sinocare.cgm.ce" />
+        <package android:name="com.sinocare.cgm" />
     </queries>
 
     <application

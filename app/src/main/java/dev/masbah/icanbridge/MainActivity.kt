@@ -1,7 +1,9 @@
 package dev.masbah.icanbridge
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.PowerManager
 import android.provider.Settings
 import android.view.Gravity
 import android.widget.Button
@@ -44,6 +46,13 @@ class MainActivity : AppCompatActivity() {
         root.addView(button("2. Izin tulis Health Connect") {
             requestPerms.launch(HealthConnectWriter.PERMISSIONS)
         })
+        root.addView(button("3. Matikan optimasi baterai") {
+            runCatching {
+                startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
+            }.onFailure {
+                startActivity(Intent(Settings.ACTION_SETTINGS))
+            }
+        })
         root.addView(button("Muat ulang log") { refresh() })
         root.addView(button("Bersihkan log") { DebugLog.clear(this); refresh() })
         root.addView(logView)
@@ -63,6 +72,9 @@ class MainActivity : AppCompatActivity() {
         val listenerOn = Settings.Secure.getString(contentResolver, "enabled_notification_listeners")
             ?.contains(packageName) == true
 
+        val pm = getSystemService(Context.POWER_SERVICE) as? PowerManager
+        val batteryUnrestricted = pm?.isIgnoringBatteryOptimizations(packageName) == true
+
         lifecycleScope.launch {
             val hcState = when (writer.availability()) {
                 HealthConnectClient.SDK_AVAILABLE ->
@@ -72,7 +84,8 @@ class MainActivity : AppCompatActivity() {
             }
             status.text = buildString {
                 append("Notification access: ${if (listenerOn) "AKTIF" else "MATI"}\n")
-                append("Health Connect: $hcState\n\n")
+                append("Health Connect: $hcState\n")
+                append("Optimasi baterai: ${if (batteryUnrestricted) "Unrestricted (OK)" else "MASIH AKTIF (Disarankan dimatikan)"}\n\n")
                 append("Kalau ada notifikasi iCan yang tidak terbaca, salin barisnya dari log di bawah.")
             }
             logView.text = DebugLog.read(this@MainActivity).joinToString("\n\n")

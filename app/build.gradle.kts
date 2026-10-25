@@ -14,8 +14,8 @@ android {
         applicationId = "dev.masbah.icanbridge"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.2.0"
     }
 
     signingConfigs {
@@ -25,17 +25,23 @@ android {
             if (keystorePropsFile.exists()) {
                 keystoreProps.load(FileInputStream(keystorePropsFile))
             }
-            storeFile = file(rootProject.file("keystore/ican-bridge-release.keystore"))
-            storePassword = keystoreProps.getProperty("storePassword", "")
-            keyAlias = keystoreProps.getProperty("keyAlias", "ican-bridge")
-            keyPassword = keystoreProps.getProperty("keyPassword", "")
+            val keyFile = rootProject.file("keystore/ican-bridge-release.keystore")
+            if (keyFile.exists()) {
+                storeFile = keyFile
+                storePassword = keystoreProps.getProperty("storePassword", "")
+                keyAlias = keystoreProps.getProperty("keyAlias", "ican-bridge")
+                keyPassword = keystoreProps.getProperty("keyPassword", "")
+            }
         }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("release")
+            val keyFile = rootProject.file("keystore/ican-bridge-release.keystore")
+            if (keyFile.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
     compileOptions {
@@ -51,8 +57,7 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.9.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
-    // Health Connect. Kalau build gagal di Metadata.autoRecorded(),
-    // lihat catatan di HealthConnectWriter.kt
+    // Health Connect
     implementation("androidx.health.connect:connect-client:1.1.0-alpha07")
 
     testImplementation("junit:junit:4.13.2")

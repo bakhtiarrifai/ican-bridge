@@ -1,11 +1,7 @@
 # iCan Bridge
 
 Jembatan satu arah: notifikasi app **iCan CGM** (Sinocare) -> **Health Connect**.
-Dari Health Connect, Google Fit / Fitbit / Home Assistant bisa ikut membaca.
-
-## Kebijakan Privasi
-
-Lihat [Privacy Policy](https://bakhtiarrifai.github.io/ican-bridge).
+Dari Health Connect, Samsung Health / Fitbit / Home Assistant bisa ikut membaca.
 
 Tidak menyentuh BLE transmitter sama sekali, jadi app iCan resmi tetap jalan normal.
 
@@ -14,10 +10,10 @@ Tidak menyentuh BLE transmitter sama sekali, jadi app iCan resmi tetap jalan nor
 1. Buka project ini di Android Studio, `Run` ke HP (bukan emulator).
 2. Tekan tombol **1** -> aktifkan "iCan Bridge" di daftar Notification access.
 3. Tekan tombol **2** -> beri izin *Write blood glucose*.
-4. Pastikan app iCan menampilkan notifikasi persisten berisi angka glukosa,
+4. Tekan tombol **3** -> matikan optimasi baterai (pilih "Unrestricted" / "Jangan Optimalkan").
+   Lakukan hal yang sama untuk app iCan Sinocare. Ini penyebab nomor satu data bolong.
+5. Pastikan app iCan menampilkan notifikasi persisten berisi angka glukosa,
    dan notifikasinya tidak di-silence.
-5. Buang iCan Bridge **dan** app iCan dari optimasi baterai
-   (Settings -> Battery -> Unrestricted). Ini penyebab nomor satu data bolong.
 
 ## Kalau angka tidak masuk
 
